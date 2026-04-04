@@ -1,4 +1,4 @@
-package plugin.prep.some;
+package plugin.prep.assessment;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;

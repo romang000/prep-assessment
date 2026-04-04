@@ -1,13 +1,13 @@
-package plugin.prep.some;
+package plugin.prep.assessment;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 
 @SpringBootApplication
-public class PrepSomeApplication {
+public class PrepAssessmentApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PrepSomeApplication.class, args);
+        SpringApplication.run(PrepAssessmentApplication.class, args);
     }
 
 }
