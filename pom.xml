@@ -105,6 +105,7 @@
                 </dependencies>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
+                    <excludes>**/generated-sources/**</excludes>
                 </configuration>
             </plugin>
         </plugins>

@@ -4,9 +4,10 @@ create table if not exists user_test_sessions
     user_id      bigint      not null,
     test_id      bigint      not null,
     start_at     timestamptz not null,
-    end_at       timestamptz not null,
-    total_second int         not null,
+    end_at       timestamptz,
+    total_second int,
     is_completed boolean     not null,
+    is_active    boolean     not null,
     created_at   timestamptz not null default now(),
     updated_at   timestamptz,
 

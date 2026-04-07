@@ -26,16 +26,17 @@ public class UserTestSessionEntity {
     private TestEntity test;
 
     @Column(nullable = false)
-    private Instant startAt;
+    private OffsetDateTime startAt;
 
-    @Column(nullable = false)
-    private Instant endAt;
+    private OffsetDateTime endAt;
 
-    @Column(nullable = false)
     private Integer totalSecond;
 
     @Column(nullable = false)
     private Boolean isCompleted;
+
+    @Column(nullable = false)
+    private Boolean isActive;
 
     @CreationTimestamp
     @Column(nullable = false)

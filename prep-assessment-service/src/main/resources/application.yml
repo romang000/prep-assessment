@@ -3,6 +3,10 @@ server:
   port: ${SERVER_PORT:8080}
   forward-headers-strategy: framework
 
+app:
+  cors:
+    allowed-origins: "*"
+
 # Spring
 spring:
   application:
