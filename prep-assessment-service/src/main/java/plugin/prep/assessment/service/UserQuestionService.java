@@ -1,5 +1,7 @@
 package plugin.prep.assessment.service;
 
+import java.math.*;
+import java.time.*;
 import java.util.*;
 
 import lombok.*;
@@ -22,32 +24,83 @@ public class UserQuestionService {
 
     private final TestRepository testRepository;
 
+    private final UserTopicStatsRepository userTopicStatsRepository;
+
+    //todo: протестить
     public UserQuestionEntity create(
         Long userId,
         Long questionId,
         Long answerId
     ) {
-        //todo: проверка существования пользователя через др сервис
+        //todo: проверка пользователя(userId)
 
         var question = questionRepository.findById(questionId)
-            .orElseThrow(() -> Exceptions.notFound(ErrorCode.QUESTION_NOT_FOUND.format(questionId)));
+            .orElseThrow(() -> Exceptions.notFound(
+                ErrorCode.QUESTION_NOT_FOUND.format(questionId)));
 
         var answer = answerRepository.findById(answerId)
-            .orElseThrow(() -> Exceptions.notFound(ErrorCode.ANSWER_NOT_FOUND.format(answerId)));
+            .orElseThrow(() -> Exceptions.notFound(
+                ErrorCode.ANSWER_NOT_FOUND.format(answerId)));
+
+        boolean isCorrect = Boolean.TRUE.equals(answer.getIsCorrect());
 
         var userQuestion = UserQuestionEntity.builder()
             .userId(userId)
             .question(question)
             .answer(answer)
-            .isCorrect(false)
+            .isCorrect(isCorrect)
             .build();
 
-        if (answer.getIsCorrect()) {
-            userQuestion.setIsCorrect(true);
+        userQuestionRepository.save(userQuestion);
+
+        var userTopicStats = userTopicStatsRepository
+            .findByUserIdAndTopicAndSubtopic(
+                userId,
+                question.getTopic(),
+                question.getSubtopic()
+            );
+
+        var now = OffsetDateTime.now();
+
+        if (userTopicStats == null) {
+            int correct = isCorrect ? 1 : 0;
+            int incorrect = isCorrect ? 0 : 1;
+
+            userTopicStats = UserTopicStatsEntity.builder()
+                .userId(userId)
+                .topic(question.getTopic())
+                .subtopic(question.getSubtopic())
+                .totalAnswered(1)
+                .correctCount(correct)
+                .incorrectCount(incorrect)
+                .accuracy(BigDecimal.valueOf(correct))
+                .lastAnsweredAt(now)
+                .build();
+
+        } else {
+            int total = userTopicStats.getTotalAnswered() + 1;
+
+            int correct = userTopicStats.getCorrectCount();
+            int incorrect = userTopicStats.getIncorrectCount();
+
+            if (isCorrect) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+
+            BigDecimal accuracy = BigDecimal.valueOf(correct / total);
+
+            userTopicStats.setTotalAnswered(total);
+            userTopicStats.setCorrectCount(correct);
+            userTopicStats.setIncorrectCount(incorrect);
+            userTopicStats.setAccuracy(accuracy);
+            userTopicStats.setLastAnsweredAt(now);
         }
 
-        var savedUserQuestion = userQuestionRepository.save(userQuestion);
-        return savedUserQuestion;
+        userTopicStatsRepository.save(userTopicStats);
+
+        return userQuestion;
     }
 
     public List<UserQuestionEntity> getByTestId(Long testId) {

@@ -35,16 +35,6 @@ public class UserTestSessionService {
             .findById(testId)
             .orElseThrow(() -> Exceptions.notFound(ErrorCode.TEST_NOT_FOUND.format(testId)));
 
-        var userTestSession = userTestSessionRepository.findByUserIdAndTestIdAndIsActiveIsTrue(userId, testId);
-
-//        if (!userTestSession.isEmpty()) {
-//            //todo: что то придумать тут
-//            // (на фронте нельзя начать тест если есть открытая сессия,
-//            // либо предлагать пользователю завершить все предыдущие, либо завершать самим)
-//            throw Exceptions.conflict(
-//                ErrorCode.USER_TEST_SESSION_NOT_COMPLETE.format(userTestSession.getFirst().getId()));
-//        }
-
         var now = OffsetDateTime.now();
         var newUserTestSession = UserTestSessionEntity.builder()
             .userId(userId)

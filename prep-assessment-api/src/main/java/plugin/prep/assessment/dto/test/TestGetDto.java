@@ -12,6 +12,9 @@ import lombok.experimental.*;
 })
 public class TestGetDto {
 
+    @Schema(description = "TYPE_THEME, TYPE_TIME, TYPE_ONE_MISTAKE")
+    private String type;
+
     @Schema(
         description = "Номер страницы (с 0)",
         example = "0",

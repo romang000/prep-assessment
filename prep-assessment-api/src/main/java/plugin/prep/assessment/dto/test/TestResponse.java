@@ -13,4 +13,6 @@ public class TestResponse {
 
     private String description;
 
+    private String type;
+
 }

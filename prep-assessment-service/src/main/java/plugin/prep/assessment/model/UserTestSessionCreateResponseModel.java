@@ -4,8 +4,6 @@ import java.time.*;
 
 import lombok.*;
 
-import plugin.prep.assessment.entity.*;
-
 @Data
 @Builder
 @NoArgsConstructor

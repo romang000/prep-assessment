@@ -18,9 +18,12 @@ public class QuestionService {
 
     private final TestRepository testRepository;
 
+    //todo: не параметры а модель
     public QuestionEntity create(
         Long testId,
         String topic,
+        String subtopic,
+        String difficulty,
         String wordingQuestion,
         Integer serialNumber
     ) {
@@ -28,9 +31,13 @@ public class QuestionService {
             .findById(testId)
             .orElseThrow(() -> Exceptions.notFound(ErrorCode.TEST_NOT_FOUND.format()));
 
+        var difficultyEnum = QuestionDifficultyEnum.fromValue(difficulty);
+
         var question = QuestionEntity.builder()
             .topic(topic)
+            .subtopic(subtopic)
             .test(test)
+            .difficulty(difficultyEnum)
             .wordingQuestion(wordingQuestion)
             .serialNumber(serialNumber)
             .build();

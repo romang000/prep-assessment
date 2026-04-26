@@ -13,6 +13,10 @@ public class QuestionResponse {
 
     private String topic;
 
+    private String subtopic;
+
+    private String difficulty;
+
     private String wordingQuestion;
 
     private Integer serialNumber;

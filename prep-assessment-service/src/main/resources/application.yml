@@ -34,8 +34,8 @@ spring:
   liquibase:
     enabled: true
     liquibase-schema: public
-    database-change-log-table: prep_some_log
-    database-change-log-lock-table: prep_some_lock
+    database-change-log-table: prep_assessment_log
+    database-change-log-lock-table: prep_assessment_lock
     change-log: classpath:db/changelog.yaml
 
 # Logging

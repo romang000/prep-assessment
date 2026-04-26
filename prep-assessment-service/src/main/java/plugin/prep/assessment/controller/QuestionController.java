@@ -25,6 +25,8 @@ public class QuestionController implements QuestionApi {
         var question = questionService.create(
             request.getTestId(),
             request.getTopic(),
+            request.getSubtopic(),
+            request.getDifficulty(),
             request.getWordingQuestion(),
             request.getSerialNumber()
         );
