@@ -26,7 +26,7 @@ public class QuestionEntity {
 
     @Column(nullable = false)
     private String topic;
-//todo: по моему не адаптировал остальное
+
     @Column(nullable = false)
     private String subtopic;
 

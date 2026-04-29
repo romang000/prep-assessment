@@ -7,8 +7,10 @@ import lombok.experimental.*;
 
 @Data
 @Accessors(chain = true)
-public class UserTopicStatsGetResponse {
+public class TopicWithSubtopicStatisticsResponse {
 
-    private List<TopicWithSubtopicStatisticsResponse> statistics;
+    private TopicStatisticsResponse topic;
+
+    private List<SubtopicStatisticsResponse> subtopics;
 
 }

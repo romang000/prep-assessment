@@ -12,10 +12,16 @@ import plugin.prep.assessment.dto.userTopicStats.*;
 @Tag(name = "User Topic Stats Api", description = "Статистика ответов пользователя")
 public interface UserTopicStatsApi {
 
+    @GetMapping("/user-topic-stats/users/{id}")
+    @Operation(description = "Получение статистики пользователя по темам")
+    List<TopicStatisticsResponse> getUserTopicStats(
+        @PathVariable Long id
+    );
+
     @GetMapping("/user-topic-stats")
-    @Operation(description = "Получение статистики ответов пользователя")
-    List<UserTopicStatsGetResponse> getUserTopicStats(
-        @ModelAttribute @ParameterObject UserTopicStatsGetRequest request
+    @Operation(description = "Получение статистики ответов пользователя по подтемам")
+    List<SubtopicStatisticsResponse> getUserTopicStatsByTopic(
+        @ParameterObject @ModelAttribute UserTopicStatsGetBySubtopicRequest request
     );
 
 }

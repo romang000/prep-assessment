@@ -5,6 +5,7 @@ import java.time.*;
 import java.util.*;
 
 import lombok.*;
+import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
 
 import plugin.prep.assessment.entity.*;
@@ -12,6 +13,7 @@ import plugin.prep.assessment.enums.*;
 import plugin.prep.assessment.repository.*;
 import plugin.prep.errors.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserQuestionService {
@@ -89,13 +91,15 @@ public class UserQuestionService {
                 incorrect++;
             }
 
-            BigDecimal accuracy = BigDecimal.valueOf(correct / total);
+            BigDecimal accuracy = BigDecimal.valueOf((double) correct / total);
 
             userTopicStats.setTotalAnswered(total);
             userTopicStats.setCorrectCount(correct);
             userTopicStats.setIncorrectCount(incorrect);
             userTopicStats.setAccuracy(accuracy);
             userTopicStats.setLastAnsweredAt(now);
+
+            log.info("{}", accuracy);
         }
 
         userTopicStatsRepository.save(userTopicStats);

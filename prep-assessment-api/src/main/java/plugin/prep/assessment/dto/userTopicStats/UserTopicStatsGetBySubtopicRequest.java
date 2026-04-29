@@ -1,14 +1,14 @@
 package plugin.prep.assessment.dto.userTopicStats;
 
-import java.util.*;
-
 import lombok.*;
 import lombok.experimental.*;
 
 @Data
 @Accessors(chain = true)
-public class UserTopicStatsGetResponse {
+public class UserTopicStatsGetBySubtopicRequest {
 
-    private List<TopicWithSubtopicStatisticsResponse> statistics;
+    private Long userId;
+
+    private String topic;
 
 }

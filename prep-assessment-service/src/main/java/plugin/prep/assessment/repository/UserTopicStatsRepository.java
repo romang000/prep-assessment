@@ -13,6 +13,10 @@ public interface UserTopicStatsRepository extends JpaRepository<UserTopicStatsEn
 
     List<UserTopicStatsEntity> findByUserId(Long userId, Limit limit);
 
+    List<UserTopicStatsEntity> findByUserId(Long userId);
+
+    List<UserTopicStatsEntity> findByUserIdAndTopic(Long userId, String topic);
+
     UserTopicStatsEntity findByUserIdAndTopicAndSubtopic(Long userId, String topic, String subtopic);
 
 }
