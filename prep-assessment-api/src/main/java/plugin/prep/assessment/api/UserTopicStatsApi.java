@@ -24,4 +24,8 @@ public interface UserTopicStatsApi {
         @ParameterObject @ModelAttribute UserTopicStatsGetBySubtopicRequest request
     );
 
+    @GetMapping("/user-topic-stats/all")
+    @Operation(description = "Получение всей статистики ответов пользователя по темам и подтемам с фильтрами")
+    List<UserTopicStatsGetAllResponse> getAll(@ParameterObject @ModelAttribute UserTopicStatsGetAllRequest request);
+
 }

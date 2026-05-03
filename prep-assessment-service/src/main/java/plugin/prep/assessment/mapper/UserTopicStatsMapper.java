@@ -16,9 +16,12 @@ public interface UserTopicStatsMapper {
     @Mapping(target = "accuracy", source = "accuracy", qualifiedByName = "bigDecimalToDouble")
     SubtopicStatisticsResponse toGetDto(UserTopicStatsEntity entity);
 
+    UserTopicStatsGetAllResponse toGetAllDto(UserTopicStatsEntity entity);
+
     @Named("bigDecimalToDouble")
     default Double bigDecimalToDouble(BigDecimal value) {
         var res = value.doubleValue() * 100;
         return res;
     }
+
 }

@@ -60,4 +60,12 @@ public class UserTopicStatsService {
         return resp;
     }
 
+    public List<UserTopicStatsGetAllResponse> getAll(UserTopicStatsGetAllRequest request) {
+        var userTopicStats = userTopicStatsRepository.findByUserId(request.getUserId());
+        var response = userTopicStats.stream()
+            .map(userTopicStatsMapper::toGetAllDto)
+            .toList();
+        return response;
+    }
+
 }

@@ -28,4 +28,9 @@ public class UserTopicStatsController implements UserTopicStatsApi {
         return userTopicStatsService.getAllByTopic(request.getUserId(), request.getTopic());
     }
 
+    @Override
+    public List<UserTopicStatsGetAllResponse> getAll(UserTopicStatsGetAllRequest request) {
+        return userTopicStatsService.getAll(request);
+    }
+
 }
