@@ -1,6 +1,7 @@
 package plugin.prep.assessment.service;
 
 import java.util.*;
+import java.util.stream.*;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -49,15 +50,19 @@ public class UserTopicStatsService {
     public List<TopicStatisticsResponse> getAllTopic(Long userId) {
         var statistics = userTopicStatsRepository.findByUserId(userId);
 
-        var resp = statistics.stream()
-            .map(s -> userTopicStatsAggregator
-                .buildTopicStatistics(
-                    s.getTopic(),
-                    statistics
-                )
-            ).toList();
-
-        return resp;
+        return statistics.stream()
+            .collect(Collectors.groupingBy(
+                UserTopicStatsEntity::getTopic,
+                LinkedHashMap::new,
+                Collectors.toList()
+            ))
+            .entrySet()
+            .stream()
+            .map(entry -> userTopicStatsAggregator.buildTopicStatistics(
+                entry.getKey(),
+                entry.getValue()
+            ))
+            .toList();
     }
 
     public List<UserTopicStatsGetAllResponse> getAll(UserTopicStatsGetAllRequest request) {

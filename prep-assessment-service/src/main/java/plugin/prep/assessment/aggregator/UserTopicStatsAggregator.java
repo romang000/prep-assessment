@@ -1,8 +1,6 @@
 package plugin.prep.assessment.aggregator;
 
-import java.math.*;
 import java.util.*;
-import java.util.stream.*;
 
 import org.springframework.stereotype.*;
 
@@ -11,30 +9,6 @@ import plugin.prep.assessment.entity.*;
 
 @Component
 public class UserTopicStatsAggregator {
-
-    public UserTopicStatsGetResponse aggregate(
-        List<UserTopicStatsEntity> statistics
-    ) {
-        var response = statistics.stream()
-            .collect(Collectors.groupingBy(
-                UserTopicStatsEntity::getTopic,
-                LinkedHashMap::new,
-                Collectors.toList()
-            ))
-            .entrySet()
-            .stream()
-            .map(entry -> new TopicWithSubtopicStatisticsResponse()
-                .setTopic(buildTopicStatistics(
-                    entry.getKey(),
-                    entry.getValue()
-                ))
-                .setSubtopics(buildSubtopics(entry.getValue()))
-            )
-            .toList();
-
-        return new UserTopicStatsGetResponse()
-            .setStatistics(response);
-    }
 
     public TopicStatisticsResponse buildTopicStatistics(
         String topic,
@@ -65,21 +39,6 @@ public class UserTopicStatsAggregator {
             .setAccuracy(accuracy);
     }
 
-    private List<SubtopicStatisticsResponse> buildSubtopics(
-        List<UserTopicStatsEntity> entities
-    ) {
-        return entities.stream()
-            .map(entity -> new SubtopicStatisticsResponse()
-                .setTopic(entity.getTopic())
-                .setSubtopic(entity.getSubtopic())
-                .setTotalAnswered(entity.getTotalAnswered())
-                .setCorrectCount(entity.getCorrectCount())
-                .setIncorrectCount(entity.getIncorrectCount())
-                .setAccuracy(entity.getAccuracy().doubleValue())
-            )
-            .toList();
-    }
-
     private Double calculateAccuracy(
         Integer totalAnswered,
         Integer correctCount
@@ -88,9 +47,7 @@ public class UserTopicStatsAggregator {
             return 0.0;
         }
 
-        return Math.round((
-            (double) correctCount / totalAnswered) * 10000
-        ) / 100.0;
+        return Math.round(((double) correctCount / totalAnswered) * 10000) / 100.0;
     }
 
 }
