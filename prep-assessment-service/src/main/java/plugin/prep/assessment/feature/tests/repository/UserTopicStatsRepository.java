@@ -1,0 +1,23 @@
+package plugin.prep.assessment.feature.tests.repository;
+
+import java.util.*;
+
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.*;
+
+import plugin.prep.assessment.feature.material.entity.*;
+import plugin.prep.assessment.feature.tests.entity.*;
+
+@Repository
+public interface UserTopicStatsRepository extends JpaRepository<UserTopicStatsEntity, Long> {
+
+    List<UserTopicStatsEntity> findByUserId(Long userId, Limit limit);
+
+    List<UserTopicStatsEntity> findByUserId(Long userId);
+
+    List<UserTopicStatsEntity> findByUserIdAndTopic(Long userId, TopicEntity topic);
+
+    UserTopicStatsEntity findByUserIdAndTopicAndSubtopic(Long userId, TopicEntity topic, String subtopic);
+
+}

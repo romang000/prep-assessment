@@ -22,7 +22,9 @@
         <test.plugins.version>3.2.5</test.plugins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <prep-errors-starter.version>0.1.0-SNAPSHOT</prep-errors-starter.version>
+        <prep-auth-starter.version>0.1.0-SNAPSHOT</prep-auth-starter.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <minio.version>8.5.7</minio.version>
     </properties>
 
     <modules>
@@ -39,6 +41,12 @@
             </dependency>
 
             <dependency>
+                <groupId>plugin</groupId>
+                <artifactId>prep-auth-starter</artifactId>
+                <version>${prep-auth-starter.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
@@ -48,6 +56,12 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
