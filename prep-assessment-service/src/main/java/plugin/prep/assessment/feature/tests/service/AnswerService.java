@@ -4,6 +4,7 @@ import java.util.*;
 
 import lombok.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 import plugin.prep.assessment.feature.tests.entity.*;
 import plugin.prep.assessment.feature.tests.enums.*;
@@ -15,6 +16,8 @@ import plugin.prep.errors.*;
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
+
+    private final UserQuestionRepository userQuestionRepository;
 
     private final QuestionRepository questionRepository;
 
@@ -60,6 +63,17 @@ public class AnswerService {
 
         var answers = answerRepository.findByQuestionId(questionId);
         return answers;
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        var answerIsExists = answerRepository.existsById(id);
+        if (!answerIsExists) {
+            throw Exceptions.notFound(ErrorCode.ANSWER_NOT_FOUND.format(id));
+        }
+
+        userQuestionRepository.deleteByAnswerId(id);
+        answerRepository.deleteById(id);
     }
 
 }

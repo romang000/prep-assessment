@@ -11,6 +11,8 @@ import plugin.prep.assessment.feature.tests.dto.test.*;
 import plugin.prep.assessment.feature.tests.mapper.*;
 import plugin.prep.assessment.feature.tests.service.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class TestController implements TestApi {
@@ -42,6 +44,18 @@ public class TestController implements TestApi {
     @ResponseStatus(HttpStatus.OK)
     public TestResponse getTestByLearningTrack(Long id) {
         return testService.getByTrack(id);
+    }
+
+    @Override
+    public TestGetByIdsResponse getTestsByIds(List<Long> ids) {
+        return testService.getByIds(ids);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(Long id) {
+        testService.delete(id);
     }
 
 }

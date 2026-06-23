@@ -33,4 +33,11 @@ public class QuestionController implements QuestionApi {
         return questionService.getByTestId(testId);
     }
 
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(Long id) {
+        questionService.delete(id);
+    }
+
 }

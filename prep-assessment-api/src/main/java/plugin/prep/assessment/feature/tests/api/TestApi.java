@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import plugin.prep.assessment.feature.tests.dto.page.*;
 import plugin.prep.assessment.feature.tests.dto.test.*;
 
+import java.util.List;
+
 @Tag(name = "Test Api", description = "Тесты")
 public interface TestApi {
 
@@ -35,5 +37,12 @@ public interface TestApi {
 
     @GetMapping("/tests/test/learning-track/{id}")
     TestResponse getTestByLearningTrack(@PathVariable Long id);
+
+    @GetMapping("/tests/by-ids")
+    TestGetByIdsResponse getTestsByIds(@RequestParam List<Long> ids);
+
+    @DeleteMapping("/tests/{id}")
+    @Operation(summary = "Удаление теста")
+    void delete(@PathVariable Long id);
 
 }

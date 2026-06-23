@@ -90,6 +90,21 @@ public class MaterialService {
         return response;
     }
 
+    @Transactional
+    public void delete(Long id) {
+        var material = materialRepository.findById(id)
+            .orElseThrow(() -> Exceptions.notFound("Материал не найден id=%s".formatted(id)));
+
+        var file = material.getFile();
+
+        userMaterialRepository.deleteByMaterialId(id);
+        materialRepository.delete(material);
+        materialRepository.flush();
+        fileRepository.delete(file);
+        fileRepository.flush();
+        minioStorageService.delete(file.getObjectKey());
+    }
+
     public PageDto<MaterialTopicGetResponse> getTopics(MaterialGetTopicsRequest request) {
         Pageable pageable = PageRequest.of(request.getPageNumber(), request.getPageSize());
 

@@ -62,4 +62,17 @@ public class MinioStorageService {
         }
     }
 
+    public void delete(String objectKey) {
+        try {
+            minioClient.removeObject(
+                RemoveObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .build()
+            );
+        } catch (Exception e) {
+            throw new PrepException("Ошибка удаления файла", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

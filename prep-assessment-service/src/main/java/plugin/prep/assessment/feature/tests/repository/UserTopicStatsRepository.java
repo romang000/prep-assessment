@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.*;
 import org.springframework.stereotype.*;
 
 import plugin.prep.assessment.feature.material.entity.*;
@@ -19,5 +20,12 @@ public interface UserTopicStatsRepository extends JpaRepository<UserTopicStatsEn
     List<UserTopicStatsEntity> findByUserIdAndTopic(Long userId, TopicEntity topic);
 
     UserTopicStatsEntity findByUserIdAndTopicAndSubtopic(Long userId, TopicEntity topic, String subtopic);
+
+    @Query(value = """
+        select id
+        from user_topic_stats
+        where topic_id = :topicId
+        """, nativeQuery = true)
+    List<Long> findIdsByTopicId(@Param("topicId") Long topicId);
 
 }

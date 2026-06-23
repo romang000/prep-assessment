@@ -1,15 +1,23 @@
 package plugin.prep.assessment.feature.material.controller;
 
-import lombok.*;
-import org.springframework.http.*;
-import org.springframework.security.access.prepost.*;
-import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import plugin.prep.assessment.feature.material.api.TopicApi;
+import plugin.prep.assessment.feature.material.dto.PageDto;
+import plugin.prep.assessment.feature.material.dto.topic.TopicCreateRequest;
+import plugin.prep.assessment.feature.material.dto.topic.TopicGetByIdsResponse;
+import plugin.prep.assessment.feature.material.dto.topic.TopicGetRequest;
+import plugin.prep.assessment.feature.material.dto.topic.TopicResponse;
+import plugin.prep.assessment.feature.material.dto.topic.TopicUpdateRequest;
+import plugin.prep.assessment.feature.material.entity.TopicEntity;
+import plugin.prep.assessment.feature.material.mapper.PageMapper;
+import plugin.prep.assessment.feature.material.mapper.TopicMapper;
+import plugin.prep.assessment.feature.material.service.TopicService;
 
-import plugin.prep.assessment.feature.material.api.*;
-import plugin.prep.assessment.feature.material.dto.*;
-import plugin.prep.assessment.feature.material.dto.topic.*;
-import plugin.prep.assessment.feature.material.mapper.*;
-import plugin.prep.assessment.feature.material.service.*;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +49,18 @@ public class TopicController implements TopicApi {
     public TopicResponse getById(Long id) {
         var topic = topicService.getById(id);
         return topicMapper.toDto(topic);
+    }
+
+    @Override
+    public TopicGetByIdsResponse getByIds(List<Long> ids) {
+        var topics = topicService.getByIds(ids);
+
+        var titles = topics.stream()
+                .map(TopicEntity::getTitle)
+                .toList();
+
+        return new TopicGetByIdsResponse()
+                .setTitle(titles);
     }
 
     @Override

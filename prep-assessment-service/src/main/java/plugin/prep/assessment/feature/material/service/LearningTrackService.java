@@ -9,6 +9,7 @@ import org.springframework.stereotype.*;
 import plugin.prep.assessment.feature.material.dto.learningTrack.*;
 import plugin.prep.assessment.feature.material.entity.*;
 import plugin.prep.assessment.feature.material.repository.*;
+import plugin.prep.assessment.feature.tests.repository.*;
 import plugin.prep.errors.*;
 
 @Service
@@ -18,6 +19,8 @@ public class LearningTrackService {
     private final LearningTrackRepository learningTrackRepository;
 
     private final TopicRepository topicRepository;
+
+    private final TestRepository testRepository;
 
     public LearningTracksEntity create(LearningTrackCreateRequest request) {
         if (learningTrackRepository.existsByCode(request.getCode())) {
@@ -61,7 +64,28 @@ public class LearningTrackService {
 
     public void delete(Long id) {
         var learningTrack = getById(id);
+        validateLearningTrackHasNoRelations(id);
+
         learningTrackRepository.delete(learningTrack);
+    }
+
+    private void validateLearningTrackHasNoRelations(Long id) {
+        Map<String, List<Long>> relatedEntityIds = new LinkedHashMap<>();
+
+        addIfNotEmpty(relatedEntityIds, "topicIds", learningTrackRepository.findTopicIdsByLearningTrackId(id));
+        addIfNotEmpty(relatedEntityIds, "testIds", testRepository.findIdsByLearningTrackId(id));
+
+        if (!relatedEntityIds.isEmpty()) {
+            throw Exceptions.conflict(
+                "Удаление невозможно, пока есть связанные сущности: %s".formatted(relatedEntityIds)
+            );
+        }
+    }
+
+    private void addIfNotEmpty(Map<String, List<Long>> relatedEntityIds, String name, List<Long> ids) {
+        if (!ids.isEmpty()) {
+            relatedEntityIds.put(name, ids);
+        }
     }
 
     private List<TopicEntity> getTopics(List<Long> topicIds) {

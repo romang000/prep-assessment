@@ -3,6 +3,7 @@ package plugin.prep.assessment.feature.material.repository;
 import java.util.*;
 
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.*;
 import org.springframework.stereotype.*;
 
 import plugin.prep.assessment.feature.material.entity.*;
@@ -19,5 +20,12 @@ public interface UserMaterialRepository extends JpaRepository<UserMaterialEntity
             and um.isLiked = true
         """)
     Set<Long> findLikedMaterialIdsByUserId(Long userId);
+
+    @Modifying
+    @Query(value = """
+        delete from user_materials
+        where material_id = :materialId
+        """, nativeQuery = true)
+    void deleteByMaterialId(@Param("materialId") Long materialId);
 
 }

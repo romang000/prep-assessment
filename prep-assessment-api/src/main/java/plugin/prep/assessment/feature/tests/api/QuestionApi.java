@@ -19,4 +19,8 @@ public interface QuestionApi {
     @Operation(summary = "Получение вопросов теста")
     List<QuestionResponse> getByTestId(@PathVariable Long testId);
 
+    @DeleteMapping("/questions/{id}")
+    @Operation(summary = "Удаление вопроса")
+    void delete(@PathVariable Long id);
+
 }

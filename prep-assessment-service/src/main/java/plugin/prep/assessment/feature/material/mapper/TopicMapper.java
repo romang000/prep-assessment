@@ -1,9 +1,8 @@
 package plugin.prep.assessment.feature.material.mapper;
 
-import org.mapstruct.*;
-
-import plugin.prep.assessment.feature.material.dto.topic.*;
-import plugin.prep.assessment.feature.material.entity.*;
+import org.mapstruct.Mapper;
+import plugin.prep.assessment.feature.material.dto.topic.TopicResponse;
+import plugin.prep.assessment.feature.material.entity.TopicEntity;
 
 @Mapper(componentModel = "spring")
 public interface TopicMapper {

@@ -1,6 +1,7 @@
 package plugin.prep.assessment.feature.material.controller;
 
 import lombok.*;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,13 @@ public class MaterialController implements MaterialApi {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public MaterialGetResponse getMaterialById(Long id) {
         return materialService.getById(id);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteMaterial(Long id) {
+        materialService.delete(id);
     }
 
 }

@@ -1,7 +1,10 @@
 package plugin.prep.assessment.feature.material.repository;
 
+import java.util.*;
+
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.*;
 import org.springframework.stereotype.*;
 
 import plugin.prep.assessment.feature.material.entity.*;
@@ -23,5 +26,12 @@ public interface MaterialRepository extends JpaRepository<MaterialEntity, Long>,
         String subtopic,
         Pageable pageable
     );
+
+    @Query(value = """
+        select id
+        from materials
+        where topic_id = :topicId
+        """, nativeQuery = true)
+    List<Long> findIdsByTopicId(@Param("topicId") Long topicId);
 
 }

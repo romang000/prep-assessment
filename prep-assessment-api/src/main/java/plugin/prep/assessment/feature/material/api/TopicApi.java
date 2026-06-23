@@ -1,5 +1,7 @@
 package plugin.prep.assessment.feature.material.api;
 
+import java.util.*;
+
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.tags.*;
 import org.springdoc.core.annotations.*;
@@ -22,6 +24,10 @@ public interface TopicApi {
     @GetMapping("/topics/{id}")
     @Operation(summary = "Получение темы по id")
     TopicResponse getById(@PathVariable Long id);
+
+    @GetMapping("/topics/by-ids")
+    @Operation(summary = "получение тем по их id")
+    TopicGetByIdsResponse getByIds(@RequestParam List<Long> ids);
 
     @PutMapping("/topics/{id}")
     @Operation(summary = "Обновление темы")

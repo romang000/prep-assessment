@@ -35,4 +35,8 @@ public interface MaterialApi {
     @Operation(description = "Получение материала по id")
     MaterialGetResponse getMaterialById(@PathVariable Long id);
 
+    @DeleteMapping("/materials/{id}")
+    @Operation(description = "Удаление материала")
+    void deleteMaterial(@PathVariable Long id);
+
 }

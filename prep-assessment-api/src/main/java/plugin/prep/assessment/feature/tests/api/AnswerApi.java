@@ -16,4 +16,7 @@ public interface AnswerApi {
     @GetMapping("/answers/questions/{questionId}")
     List<AnswerGetResponse> getByQuestionId(@PathVariable Long questionId);
 
+    @DeleteMapping("/answers/{id}")
+    void delete(@PathVariable Long id);
+
 }

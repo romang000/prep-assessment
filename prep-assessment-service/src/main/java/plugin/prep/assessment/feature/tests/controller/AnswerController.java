@@ -3,6 +3,7 @@ package plugin.prep.assessment.feature.tests.controller;
 import java.util.*;
 
 import lombok.*;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +45,11 @@ public class AnswerController implements AnswerApi {
         return response;
     }
 
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(Long id) {
+        answerService.delete(id);
+    }
 
 }

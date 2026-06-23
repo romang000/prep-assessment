@@ -30,4 +30,27 @@ public interface UserQuestionRepository extends JpaRepository<UserQuestionEntity
         @Param("testId") Long testId
     );
 
+    @Modifying
+    @Query(value = """
+            delete from user_questions
+            where question_id = :questionId
+        """, nativeQuery = true)
+    void deleteByQuestionId(@Param("questionId") Long questionId);
+
+    @Modifying
+    @Query(value = """
+            delete from user_questions
+            where answer_id = :answerId
+        """, nativeQuery = true)
+    void deleteByAnswerId(@Param("answerId") Long answerId);
+
+    @Modifying
+    @Query(value = """
+            delete from user_questions uq
+            using questions q
+            where uq.question_id = q.id
+              and q.test_id = :testId
+        """, nativeQuery = true)
+    void deleteByTestId(@Param("testId") Long testId);
+
 }
