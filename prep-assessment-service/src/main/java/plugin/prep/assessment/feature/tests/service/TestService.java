@@ -52,7 +52,7 @@ public class TestService {
 
         var typeEnum = TypeTestEnum.valueOf(request.getType());
         //todo: очевидно елси будет null то 500
-        var gradeEnum = TestGradeEnum.valueOf(request.getGrade());
+        var gradeEnum = TestGradeEnum.fromValue(request.getGrade());
 
         var topic = topicRepository.findById(request.getTopicId())
                 .orElseThrow(() -> Exceptions.badRequest(
@@ -104,8 +104,12 @@ public class TestService {
         Specification<TestEntity> specification = Specification
                 .where(TestSpecification.hasType(type));
 
-        if (request.getGrade() != null && !request.getGrade().isBlank()) {
-            TestGradeEnum grade = TestGradeEnum.valueOf(request.getGrade());
+        var gradeFilter = request.getLevel() == null || request.getLevel().isBlank()
+                ? request.getGrade()
+                : request.getLevel();
+
+        if (gradeFilter != null && !gradeFilter.isBlank()) {
+            TestGradeEnum grade = TestGradeEnum.fromValue(gradeFilter);
 
             specification = specification.and(
                     TestSpecification.hasGrade(grade)

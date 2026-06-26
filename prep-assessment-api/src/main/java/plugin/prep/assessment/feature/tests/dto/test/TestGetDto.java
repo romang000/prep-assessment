@@ -15,7 +15,11 @@ public class TestGetDto {
     @Schema(description = "REGULAR, DIAGNOSTIC")
     private String type;
 
+    @Schema(description = "JUNIOR, MIDDLE, SENIOR")
     private String grade;
+
+    @Schema(description = "JUNIOR, MIDDLE, SENIOR")
+    private String level;
 
     private Long topicId;
 

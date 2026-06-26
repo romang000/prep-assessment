@@ -21,6 +21,17 @@ public interface UserTopicStatsRepository extends JpaRepository<UserTopicStatsEn
 
     UserTopicStatsEntity findByUserIdAndTopicAndSubtopic(Long userId, TopicEntity topic, String subtopic);
 
+    @Query("""
+        select uts
+        from user_topic_stats uts
+        where uts.userId = :userId
+          and uts.topic.id in :topicIds
+        """)
+    List<UserTopicStatsEntity> findByUserIdAndTopicIds(
+        @Param("userId") Long userId,
+        @Param("topicIds") List<Long> topicIds
+    );
+
     @Query(value = """
         select id
         from user_topic_stats

@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
+import plugin.prep.assessment.feature.recommendation.service.*;
+import plugin.prep.assessment.feature.readiness.service.*;
+import plugin.prep.assessment.feature.tests.dto.userTopicStats.*;
 import plugin.prep.assessment.feature.tests.entity.*;
 import plugin.prep.assessment.feature.tests.enums.*;
 import plugin.prep.assessment.feature.tests.mapper.*;
@@ -26,6 +29,12 @@ public class UserTestSessionService {
     private final QuestionRepository questionRepository;
 
     private final UserQuestionRepository userQuestionRepository;
+
+    private final ReadinessService readinessService;
+
+    private final UserTopicStatsService userTopicStatsService;
+
+    private final RecommendationService recommendationService;
 
     @Transactional
     public UserTestSessionCreateResponseModel create(
@@ -82,6 +91,8 @@ public class UserTestSessionService {
         userTestSession.setTotalSecond((int) totalSecond);
 
         var savedTestSession = userTestSessionRepository.save(userTestSession);
+        updateRecommendations(savedTestSession);
+        recalculateReadiness(savedTestSession);
         var userLevel = calculateDiagnosticUserLevel(savedTestSession);
 
         return new UserTestSessionCompleteResponseModel()
@@ -140,6 +151,29 @@ public class UserTestSessionService {
         }
 
         return TestGradeEnum.JUNIOR.name();
+    }
+
+    private void updateRecommendations(UserTestSessionEntity userTestSession) {
+        if (!Boolean.TRUE.equals(userTestSession.getIsCompleted())) {
+            return;
+        }
+
+        var statistics = userTopicStatsService.getAll(
+            new UserTopicStatsGetAllRequest().setUserId(userTestSession.getUserId())
+        );
+
+        recommendationService.create(statistics);
+    }
+
+    private void recalculateReadiness(UserTestSessionEntity userTestSession) {
+        if (!Boolean.TRUE.equals(userTestSession.getIsCompleted())) {
+            return;
+        }
+
+        var learningTrack = userTestSession.getTest().getLearningTrack();
+        var learningTrackId = learningTrack == null ? null : learningTrack.getId();
+
+        readinessService.calculateAndSave(userTestSession.getUserId(), learningTrackId);
     }
 
     private int getQuestionWeight(QuestionDifficultyEnum grade) {
